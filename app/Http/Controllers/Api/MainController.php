@@ -19,7 +19,7 @@ class MainController extends Controller
 
         $result = $data->each(function (Crawler $v) {
             return [
-                'link' =>str_replace('https://komikindo2.com/komik/','',$v->children('a')->attr('href')) ,
+                'link' => str_replace('https://komikindo2.com/komik/', '', $v->children('a')->attr('href')),
                 'img' => $v->filter('.limit')->children('img')->count() > 0
                     ? $v->filter('.limit')->children('img')->attr('src')
                     : null,
@@ -46,7 +46,7 @@ class MainController extends Controller
 
         $result = $data->each(function (Crawler $v) {
             return [
-                'link' =>str_replace('https://komikindo2.com/komik/','',$v->filter('.animepostxx-top')->children('a')->attr('href')),
+                'link' => str_replace('https://komikindo2.com/komik/', '', $v->filter('.animepostxx-top')->children('a')->attr('href')),
                 'img' => $v->filter('.limietles')->children('img')->count() > 0
                     ? $v->filter('.limietles')->children('img')->attr('src')
                     : null,
@@ -79,7 +79,7 @@ class MainController extends Controller
 
         $result = $data->each(function (Crawler $v) {
             return [
-                'link' =>str_replace('https://komikindo2.com/komik/','',$v->children('a')->attr('href')) ,
+                'link' => str_replace('https://komikindo2.com/komik/', '', $v->children('a')->attr('href')),
                 'img' => $v->filter('.limit')->children('img')->count() > 0
                     ? $v->filter('.limit')->children('img')->attr('src')
                     : null,
@@ -136,7 +136,7 @@ class MainController extends Controller
 
         $result = $data->each(function (Crawler $v) {
             return [
-                'link' =>str_replace('https://komikindo2.com/komik/','',$v->children('a')->attr('href')) ,
+                'link' => str_replace('https://komikindo2.com/komik/', '', $v->children('a')->attr('href')),
                 'img' => $v->filter('.limit')->children('img')->count() > 0
                     ? $v->filter('.limit')->children('img')->attr('src')
                     : null,
@@ -145,6 +145,11 @@ class MainController extends Controller
                 'ratting' => $v->filter('.adds .rating')->text(),
 
             ];
+        });
+
+        $result = collect($result)->map(function ($v) {
+            $v['type'] = str_replace('typeflag', '', $v['type']);
+            return $v;
         });
 
         $crawler2 = $browser->request('GET', 'https://komikindo2.com/daftar-manga/?genre%5B%5D=' . $genre . '&status=&type=&format=0&order=&title=');
@@ -169,7 +174,7 @@ class MainController extends Controller
 
         $result = $data->each(function (Crawler $v) {
             return [
-                'link' =>str_replace('https://komikindo2.com/komik/','',$v->children('a')->attr('href')) ,
+                'link' => str_replace('https://komikindo2.com/komik/', '', $v->children('a')->attr('href')),
                 'img' => $v->filter('.limit')->children('img')->count() > 0
                     ? $v->filter('.limit')->children('img')->attr('src')
                     : null,
@@ -178,6 +183,11 @@ class MainController extends Controller
                 'ratting' => $v->filter('.adds .rating')->text(),
 
             ];
+        });
+
+        $result = collect($result)->map(function ($v) {
+            $v['type'] = str_replace('typeflag', '', $v['type']);
+            return $v;
         });
 
         $crawler2 = $browser->request('GET', 'https://komikindo2.com/daftar-manga/?tema%5B%5D=' . $theme . '&status=&type=&format=&order=&title=');
@@ -202,7 +212,7 @@ class MainController extends Controller
 
         $result = $data->each(function (Crawler $v) {
             return [
-                'link' =>str_replace('https://komikindo2.com/komik/','',$v->children('a')->attr('href')) ,
+                'link' => str_replace('https://komikindo2.com/komik/', '', $v->children('a')->attr('href')),
                 'img' => $v->filter('.limit')->children('img')->count() > 0
                     ? $v->filter('.limit')->children('img')->attr('src')
                     : null,
@@ -211,6 +221,11 @@ class MainController extends Controller
                 'ratting' => $v->filter('.adds .rating')->text(),
 
             ];
+        });
+
+        $result = collect($result)->map(function ($v) {
+            $v['type'] = str_replace('typeflag', '', $v['type']);
+            return $v;
         });
 
         $crawler2 = $browser->request('GET', 'https://komikindo2.com/daftar-manga/?status=&type=' . $jenis . '&format=&order=&title=');
@@ -258,9 +273,9 @@ class MainController extends Controller
 
         $response['tema'] = $data->filter('.infox .spe')->children('span')->each(function ($v) {
             if (strpos($v->text(), 'Tema:') !== false) {
-           return $v->children('a')->each(function($b){
-                 return $b->text();
-               });  
+                return $v->children('a')->each(function ($b) {
+                    return $b->text();
+                });
             }
         });
         $response['tema'] = array_filter($response['tema'], fn($item) => !is_null($item));
@@ -280,7 +295,7 @@ class MainController extends Controller
                 return trim(str_replace($v->filter('b')->text(), '', $v->text()));
             });
             return  [
-                'url' => str_replace('https://komikindo2.com/komik/','', $v->filter('.imgseries')->children('a')->attr('href')),
+                'url' => str_replace('https://komikindo2.com/komik/', '', $v->filter('.imgseries')->children('a')->attr('href')),
                 'img' => $v->filter('.imgseries')->children('a')->children('img')->attr('src'),
                 'title' => $v->filter('.leftseries .series')->text(),
                 'subtitle' => $v->filter('.excerptmirip')->text(),
@@ -291,7 +306,7 @@ class MainController extends Controller
 
         $response['chapter'] = $data->filter('.eps_lst #chapter_list')->children('ul')->children('li')->count() == 0 ? [] : $data->filter('.eps_lst #chapter_list')->children('ul')->children('li')->each(function ($v) {
             return  [
-                'url' => str_replace('https://komikindo2.com/','', $v->filter('.lchx')->children('a')->attr('href')),
+                'url' => str_replace('https://komikindo2.com/', '', $v->filter('.lchx')->children('a')->attr('href')),
                 'chapter' => $v->filter('.lchx')->text(),
                 'update' => $v->filter('.dt')->text()
             ];
@@ -299,32 +314,59 @@ class MainController extends Controller
         return new ArrayResoruce(true, '', $response);
     }
 
-    public function baca($id){
-        $url = 'https://komikindo2.com/'.$id;
-        
+    public function baca($id)
+    {
+        $url = 'https://komikindo2.com/' . $id;
+
         $browser = new HttpBrowser(HttpClient::create());
         $crawler = $browser->request('GET', $url);
         $data = $crawler->filter('#content');
 
         $response = [];
 
-        $response['title']= $data->filter('.chapter-content .dtlx .entry-title')->text();
+        $response['title'] = $data->filter('.chapter-content .dtlx .entry-title')->text();
 
-        $response['back_chapter'] = $data->filter('.chapter-content .navig .nextprev')->children('a[rel="prev"]')->each(function($v) {
+        $response['back_chapter'] = $data->filter('.chapter-content .navig .nextprev')->children('a[rel="prev"]')->each(function ($v) {
             return $v->attr('href');
         });
         $response['back_chapter'] = array_filter($response['back_chapter'], fn($item) => !is_null($item));
-        $response['back_chapter'] = str_replace('https://komikindo2.com/','',  array_shift($response['back_chapter']));
+        $response['back_chapter'] = str_replace('https://komikindo2.com/', '',  array_shift($response['back_chapter']));
 
-        $response['next_chapter'] = $data->filter('.chapter-content .navig .nextprev')->children('a[rel="next"]')->each(function($v) {
+        $response['next_chapter'] = $data->filter('.chapter-content .navig .nextprev')->children('a[rel="next"]')->each(function ($v) {
             return $v->attr('href');
         });
         $response['next_chapter'] = array_filter($response['next_chapter'], fn($item) => !is_null($item));
-        $response['next_chapter'] = str_replace('https://komikindo2.com/','', array_shift($response['next_chapter']));
-        
-        $response['list'] = $data->filter('.chapter-content #chimg-auh')->children('img')->each(function ($v){
+        $response['next_chapter'] = str_replace('https://komikindo2.com/', '', array_shift($response['next_chapter']));
+
+        $response['list'] = $data->filter('.chapter-content #chimg-auh')->children('img')->each(function ($v) {
             return $v->attr('src');
         });
         return new ArrayResoruce(true, '', $response);
+    }
+
+
+    public function search($id)
+    {
+        $url = 'https://komikindo2.com/?s=' . $id;
+        $browser = new HttpBrowser(HttpClient::create());
+        $crawler = $browser->request('GET', $url);
+        $data = $crawler->filter('.film-list .animposx');
+        $result = $data->each(function (Crawler $v) {
+            return [
+                'link' => str_replace('https://komikindo2.com/komik/', '', $v->children('a')->attr('href')),
+                'img' => $v->filter('.limit')->children('img')->count() > 0
+                    ? $v->filter('.limit')->children('img')->attr('src')
+                    : null,
+                'title' => $v->filter('.tt')->text(),
+                'ratting' => $v->filter('.adds .rating')->children('i')->text(),
+                'type' => $v->filter('.typeflag ')->attr('class'),
+            ];
+        });
+        $result = collect($result)->map(function ($v) {
+            $v['type'] = str_replace('typeflag', '', $v['type']);
+            return $v;
+        });
+
+        return new ArrayResoruce(true, '', $result);
     }
 }
