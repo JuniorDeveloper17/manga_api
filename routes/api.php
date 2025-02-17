@@ -25,3 +25,5 @@ Route::get('/jenis/{jenis}/{page}', [MainController::class, 'listjenis']);
 Route::get('/detail/{id}', [MainController::class, 'detail']);
 
 Route::get('/baca/{id}', [MainController::class, 'baca']);
+
+Route::get('/search/{id}', [MainController::class, 'search']);
